@@ -24,7 +24,7 @@ from django.contrib.auth.models import User
 #     date_joined = models.DateTimeField(default=timezone.now)
 
 
-class ImagerProfile(models.Models):
+class ImagerProfile(models.Model):
     """Creates a ImaderProfile class."""
 
     SLR = 'SLR'
@@ -68,4 +68,5 @@ class ImagerProfile(models.Models):
     bio = models.TextField(max_length=300, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     photo_styles = models.CharField(max_length=50, choices=STYLES, blank=True, null=True)
-    user = models.ForeignKey(User, unique=True)
+    active = models.BooleanField(default=True)
+    user = models.OneToOneField(User)
