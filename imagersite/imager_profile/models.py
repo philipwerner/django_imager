@@ -1,27 +1,8 @@
 """Imager Profile model."""
 from django.db import models
 from django.contrib.auth.models import User
-
-
-# Create your models here.
-# class User(User, PermissionsMixin):
-#     """Create an new User class."""
-
-#     first_name = models.CharField(max_length=30, blank=True)
-#     last_name = models.CharField(max_length=30, blank=True)
-#     email = models.EmailField(max_length=100, blank=True)
-#     is_staff = models.BooleanField(
-#         default=False,
-#         help_text=('Designates whether the user can log into this admin site.'),
-#     )
-#     is_active = models.BooleanField(
-#         default=True,
-#         help_text=(
-#             'Designates whether this user should be treated as active. '
-#             'Unselect this instead of deleting accounts.'
-#         ),
-#     )
-#     date_joined = models.DateTimeField(default=timezone.now)
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class ImagerProfile(models.Model):
@@ -70,3 +51,20 @@ class ImagerProfile(models.Model):
     photo_styles = models.CharField(max_length=50, choices=STYLES, blank=True, null=True)
     active = models.BooleanField(default=True)
     user = models.OneToOneField(User)
+
+    def active(self):
+        """Return active users."""
+        return [user.username for user in User.objects.all() if user.is_active]
+
+
+@receiver(post_save, sender=User)
+def create_user_imager_profile(sender, instance, created, **kwargs):
+    """Create a profile."""
+    if created:
+        ImagerProfile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_imager_profile(sender, instance, **kwargs):
+    """Save user profile."""
+    instance.profile.save()
