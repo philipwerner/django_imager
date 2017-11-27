@@ -3,7 +3,6 @@ omit =
     */migrations/*,
     */tests.py
     manage.py
-    lending_library/wsgi.py
     django_imager/*
     imager_profile/admin.py
     imager_profile/apps.py
