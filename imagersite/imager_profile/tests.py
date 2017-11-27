@@ -1,11 +1,7 @@
-"""Django app test."""
-
+"""Test module for imager."""
 from __future__ import unicode_literals
-
 from django.contrib.auth.models import User
-
 from django.test import TestCase
-
 import factory
 
 
